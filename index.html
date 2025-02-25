@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA and HRA Arrear Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #2c3e50, #3498db);
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 1200px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            flex-wrap: wrap; /* Allow wrapping */
+        }
+        .form-container, .result-container {
+            padding: 20px;
+            width: 45%;
+        }
+        .form-container {
+            flex: 1;
+            max-width: 100%;
+        }
+        .result-container {
+            flex: 1;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        h1, h2 {
+            color: #34495e;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        h2 {
+            font-size: 1.1rem;
+            color: #2980b9;
+        }
+        h1 {
+            color: red;
+            text-align: center;
+        }
+        label {
+            font-size: 13px;
+            margin-top: 8px;
+            display: block;
+            color: #34495e;
+            font-weight: 500;
+        }
+        input[type="number"], input[type="date"], select {
+            padding: 6px;
+            font-size: 13px;
+            margin: 5px 0;
+            width: 90%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            color: #2c3e50;
+        }
+        input[type="number"]:focus, input[type="date"]:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+            background-color: #fff;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 12px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            margin-top: 15px;
+            font-size: 13px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            table-layout: fixed;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            padding: 6px 8px;
+            font-weight: 600;
+        }
+        td {
+            padding: 4px 6px;
+            color: #2c3e50;
+            font-weight: 500;
+            word-wrap: break-word;
+        }
+        td:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+        td:nth-child(even) {
+            background-color: #f1f1f1;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #2c3e50;
+            color: white;
+            text-align: right;
+            padding: 5px 20px;
+            font-size: 12px;
+        }
+        th:nth-child(2), td:nth-child(2) {
+            width: 15%;
+        }
+        table {
+            font-size: 12px;
+        }
+        .developer-info {
+            color: #2c16ee;
+            font-size: 12px;
+            text-align: right;
+            margin-top: 30px;
+            padding-right: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .form-container, .result-container {
+                width: 90%;
+                padding: 10px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            label, input[type="number"], input[type="date"], select, button {
+                font-size: 12px;
+            }
+            table {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem;
+            }
+            h2 {
+                font-size: 1rem;
+            }
+            label, input[type="number"], input[type="date"], select, button {
+                font-size: 10px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>शासकिय अधिकारी व कर्मचारी यांचा महागाई भत्ता व घरभाडे भत्ता वाढ फरक</h1>
+            <h2>DA & HRA Arrear Calculations</h2>
+
+            <label for="basic_july">Enter Basic Salary (July 2024):</label>
+            <input type="number" id="basic_july" placeholder="Enter Basic Salary (July 2024)">
+
+            <label for="basic_jan">Enter Basic Salary (January 2025):</label>
+            <input type="number" id="basic_jan" placeholder="Enter Basic Salary (January 2025)">
+
+            <label for="from_date">Enter From Date:</label>
+            <input type="date" id="from_date" value="2024-07-01">
+
+            <label for="to_date">Enter To Date:</label>
+            <input type="date" id="to_date" value="2025-02-28">
+
+            <label for="city">Select City Type:</label>
+            <select id="city">
+                <option value="c_class">C Class City (9% to 10%)</option>
+                <option value="b_class">B Class City (18% to 20%)</option>
+                <option value="metro">Metro City (27% to 30%)</option>
+            </select>
+
+            <button onclick="calculateArrear()">Calculate Arrear</button>
+        </div>
+
+        <div class="result-container" id="result">
+            <!-- Results will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        function calculateArrear() {
+            var basic_july = parseFloat(document.getElementById('basic_july').value);
+            var basic_jan = parseFloat(document.getElementById('basic_jan').value);
+            var from_date = new Date(document.getElementById('from_date').value);
+            var to_date = new Date(document.getElementById('to_date').value);
+            var city = document.getElementById('city').value;
+
+            if (!basic_july || basic_july <= 0 || !basic_jan || basic_jan <= 0 || !from_date || !to_date) {
+                alert("Please enter all the required fields.");
+                return;
+            }
+
+            // Helper function to get the number of days in a specific month
+            function getDaysInMonth(month, year) {
+                return new Date(year, month, 0).getDate();
+            }
+
+            // DA and HRA increments based on city
+            var daIncrease = 3;  // DA increased from 50% to 53%
+            var hraIncrease = 0;
+
+            if (city === 'c_class') {
+                hraIncrease = 1;  // 9% to 10%
+            } else if (city === 'b_class') {
+                hraIncrease = 2;  // 18% to 20%
+            } else if (city === 'metro') {
+                hraIncrease = 3;  // 27% to 30%
+            }
+
+            var resultHTML = '<table><tr><th>Sr. No.</th><th>Month</th><th>Basic Salary</th><th>Total DA Arrear</th><th>Total HRA Arrear</th><th>Total</th><th>NPS 10%</th><th>Net Arrear</th></tr>';
+
+            var totalDaArrear = 0;
+            var totalHraArrear = 0;
+            var totalBenefits = 0;
+            var totalNpsDeduction = 0;
+            var totalNetArrear = 0;
+            var monthCount = 1;
+
+            // First Period: July 2024 to Dec 2024
+            for (var i = 0; i < 6; i++) {
+                var currentMonth = new Date(from_date);
+                currentMonth.setMonth(currentMonth.getMonth() + i);
+                var monthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+                var basicSalary = basic_july;
+
+                // Calculate daily salary
+                var dailySalary = Math.round(basicSalary / getDaysInMonth(currentMonth.getMonth() + 1, currentMonth.getFullYear()));
+
+                // Calculate monthly DA and HRA arrears
+                var monthlyDaArrear = Math.round(dailySalary * (daIncrease / 100) * getDaysInMonth(currentMonth.getMonth() + 1, currentMonth.getFullYear()));
+                var monthlyHraArrear = Math.round(dailySalary * (hraIncrease / 100) * getDaysInMonth(currentMonth.getMonth() + 1, currentMonth.getFullYear()));
+
+                // Total DA and HRA
+                var total = monthlyDaArrear + monthlyHraArrear;
+
+                // Calculate NPS Deduction (10% of DA Arrear)
+                var npsDeduction = Math.round(monthlyDaArrear * 0.10);
+
+                // Net Arrear after NPS Deduction
+                var netArrear = total - npsDeduction;
+
+                resultHTML += `
+                    <tr>
+                        <td>${monthCount}</td>
+                        <td>${monthName}</td>
+                        <td>${basicSalary}</td>
+                        <td>${monthlyDaArrear}</td>
+                        <td>${monthlyHraArrear}</td>
+                        <td>${total}</td>
+                        <td>${npsDeduction}</td>
+                        <td>${netArrear}</td>
+                    </tr>`;
+
+                totalDaArrear += monthlyDaArrear;
+                totalHraArrear += monthlyHraArrear;
+                totalBenefits += total;
+                totalNpsDeduction += npsDeduction;
+                totalNetArrear += netArrear;
+                monthCount++;
+            }
+
+            // Second Period: Jan 2025 to Feb 2025
+            for (var j = 0; j < 2; j++) {
+                var currentMonth = new Date(from_date);
+                currentMonth.setMonth(currentMonth.getMonth() + 6 + j); // Start from Jan 2025
+                var monthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+                var basicSalary = basic_jan;
+
+                // Calculate daily salary
+                var dailySalary = Math.round(basicSalary / getDaysInMonth(currentMonth.getMonth() + 1, currentMonth.getFullYear()));
+
+                // Calculate monthly DA and HRA arrears
+                var monthlyDaArrear = Math.round(dailySalary * (daIncrease / 100) * getDaysInMonth(currentMonth.getMonth() + 1, currentMonth.getFullYear()));
+                var monthlyHraArrear = Math.round(dailySalary * (hraIncrease / 100) * getDaysInMonth(currentMonth.getMonth() + 1, currentMonth.getFullYear()));
+
+                // Total DA and HRA
+                var total = monthlyDaArrear + monthlyHraArrear;
+
+                // Calculate NPS Deduction (10% of DA Arrear)
+                var npsDeduction = Math.round(monthlyDaArrear * 0.10);
+
+                // Net Arrear after NPS Deduction
+                var netArrear = total - npsDeduction;
+
+                resultHTML += `
+                    <tr>
+                        <td>${monthCount}</td>
+                        <td>${monthName}</td>
+                        <td>${basicSalary}</td>
+                        <td>${monthlyDaArrear}</td>
+                        <td>${monthlyHraArrear}</td>
+                        <td>${total}</td>
+                        <td>${npsDeduction}</td>
+                        <td>${netArrear}</td>
+                    </tr>`;
+
+                totalDaArrear += monthlyDaArrear;
+                totalHraArrear += monthlyHraArrear;
+                totalBenefits += total;
+                totalNpsDeduction += npsDeduction;
+                totalNetArrear += netArrear;
+                monthCount++;
+            }
+
+            resultHTML += `
+                <tr style="font-weight: bold; color: #e74c3c;">
+                    <td colspan="6">Total Arrear</td>
+                    <td>${totalNpsDeduction}</td>
+                    <td>${totalNetArrear}</td>
+                </tr>
+            </table>`;
+
+            resultHTML += `
+                <div class="result">
+                    <p><strong>In-hand Arrears (after NPS): ₹${totalNetArrear}</strong></p>
+                </div>
+            `;
+
+            resultHTML += `
+                <div class="developer-info">
+                    <p>Developer: Mr. Anshuman Gaikwad, WRD Satara</p>
+                </div>
+            `;
+
+            document.getElementById("result").innerHTML = resultHTML;
+        }
+    </script>
+</body>
+</html>
